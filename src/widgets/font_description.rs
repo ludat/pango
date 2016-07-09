@@ -1,4 +1,4 @@
-use std::fmt::{self, Formatter, Display};
+use std::fmt::{self, Formatter, Display, Debug};
 
 use ffi;
 use glib::translate::{Stash, FromGlibPtr, ToGlibPtr, from_glib_full, from_glib_none, from_glib};
@@ -95,6 +95,13 @@ impl FontDescription {
 }
 
 impl Display for FontDescription {
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        let s: String = unsafe { from_glib_full(ffi::pango_font_description_to_string(self.0)) };
+        write!(f, "{}", s)
+    }
+}
+
+impl Debug for FontDescription {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         let s: String = unsafe { from_glib_full(ffi::pango_font_description_to_string(self.0)) };
         write!(f, "{}", s)
